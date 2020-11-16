@@ -6,9 +6,13 @@ import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.PrintStream;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.Random;
 
+import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -40,6 +44,14 @@ public class BadIOGUI {
         canvas.add(write, BorderLayout.CENTER);
         frame.setContentPane(canvas);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+        final JPanel myPanel = new JPanel();
+        myPanel.setLayout(new BoxLayout(myPanel, BoxLayout.X_AXIS));
+        canvas.add(myPanel, BorderLayout.CENTER);
+        myPanel.add(write);
+
+        final JButton read = new JButton("Read from file");
+        myPanel.add(read);
         /*
          * Handlers
          */
@@ -61,6 +73,18 @@ public class BadIOGUI {
                 }
             }
         });
+
+        read.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(final ActionEvent e) {
+                try {
+                    System.out.println(Files.readAllLines(Paths.get(PATH)));
+                } catch (IOException e1) {
+                    System.out.println(e1.getMessage());
+                }
+            }
+        });
     }
 
     private void display() {
@@ -76,6 +100,7 @@ public class BadIOGUI {
         final int sw = (int) screen.getWidth();
         final int sh = (int) screen.getHeight();
         frame.setSize(sw / PROPORTION, sh / PROPORTION);
+        frame.pack();
         /*
          * Instead of appearing at (0,0), upper left corner of the screen, this flag
          * makes the OS window manager take care of the default positioning on screen.

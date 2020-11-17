@@ -1,9 +1,17 @@
 package it.unibo.oop.lab.mvc;
 
+import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
+import javax.swing.BoxLayout;
+import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
 
 /**
  * A very simple program using a graphical interface.
@@ -38,6 +46,44 @@ public final class SimpleGUI {
      * builds a new {@link SimpleGUI}.
      */
     public SimpleGUI() {
+        final SimpleController controller = new SimpleController();
+        final JPanel canvas = new JPanel();
+        canvas.setLayout(new BorderLayout());
+
+        final JPanel secondPanel = new JPanel();
+        secondPanel.setLayout(new BoxLayout(secondPanel, BoxLayout.LINE_AXIS));
+        canvas.add(secondPanel, BorderLayout.SOUTH);
+
+        final JTextField txtField = new JTextField();
+        canvas.add(txtField, BorderLayout.NORTH);
+
+        final JTextArea txtArea = new JTextArea();
+        canvas.add(txtArea, BorderLayout.CENTER);
+        txtArea.setEditable(false);
+
+        final JButton print = new JButton("Print");
+        final JButton showHystory = new JButton("Show Hystory");
+        secondPanel.add(print);
+        secondPanel.add(showHystory);
+
+        print.addActionListener(new ActionListener() {
+            public void actionPerformed(final ActionEvent e) {
+                controller.nextPrint(txtField.getText());
+                controller.printString();
+            }
+        });
+
+        showHystory.addActionListener(new ActionListener() {
+            public void actionPerformed(final ActionEvent e) {
+                for (final String printed : controller.getPrintHystory()) {
+                    txtArea.append(printed + "\n");
+                }
+            }
+        });
+
+        frame.setTitle("Exercise 5 mvc");
+        frame.setContentPane(canvas);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         /*
          * Make the frame half the resolution of the screen. This very method is enough
@@ -60,6 +106,11 @@ public final class SimpleGUI {
          * Results may vary, but it is generally the best choice.
          */
         frame.setLocationByPlatform(true);
+        frame.setVisible(true);
+    }
+
+    public static void main(final String... arg) {
+        new SimpleGUI();
     }
 
 }

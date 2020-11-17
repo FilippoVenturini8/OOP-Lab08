@@ -5,9 +5,11 @@ import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 
@@ -55,7 +57,11 @@ public final class SimpleGUI {
 
             @Override
             public void actionPerformed(final ActionEvent e) {
-                controller.saveOnCurrent(txtArea.getText());
+                try {
+                    controller.saveOnCurrent(txtArea.getText());
+                } catch (IOException e1) {
+                    JOptionPane.showMessageDialog(frame, e1.getMessage());
+                }
             }
 
         });

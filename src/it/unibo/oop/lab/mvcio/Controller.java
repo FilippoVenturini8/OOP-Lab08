@@ -68,11 +68,9 @@ public class Controller {
      * 
      * @param s string to print in the current file
      */
-    public void saveOnCurrent(final String s) {
+    public void saveOnCurrent(final String s) throws IOException {
         try (PrintStream ps = new PrintStream(this.getPath())) {
             ps.print(s);
-        } catch (IOException e1) {
-            System.out.println(e1.getMessage());
         }
     }
 

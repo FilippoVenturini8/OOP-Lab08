@@ -1,9 +1,15 @@
 package it.unibo.oop.lab.mvcio;
 
+import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
+import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.JTextArea;
 
 /**
  * A very simple program using a graphical interface.
@@ -37,6 +43,26 @@ public final class SimpleGUI {
      * builds a new {@link SimpleGUI}.
      */
     public SimpleGUI() {
+        final Controller controller = new Controller();
+        final JPanel canvas = new JPanel();
+        canvas.setLayout(new BorderLayout());
+        final JTextArea txtArea = new JTextArea();
+        canvas.add(txtArea, BorderLayout.CENTER);
+        final JButton saveButton = new JButton("Save");
+        canvas.add(saveButton, BorderLayout.SOUTH);
+
+        saveButton.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(final ActionEvent e) {
+                controller.saveOnCurrent(txtArea.getText());
+            }
+
+        });
+
+        frame.setTitle("My first GUI");
+        frame.setContentPane(canvas);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         /*
          * Make the frame half the resolution of the screen. This very method is enough
          * for a single screen setup. In case of multiple monitors, the primary is
@@ -57,6 +83,11 @@ public final class SimpleGUI {
          * Results may vary, but it is generally the best choice.
          */
         frame.setLocationByPlatform(true);
+        frame.setVisible(true);
+    }
+
+    public static void main(final String... args) {
+        new SimpleGUI();
     }
 
 }

@@ -1,5 +1,9 @@
 package it.unibo.oop.lab.mvcio;
 
+import java.io.File;
+import java.io.IOException;
+import java.io.PrintStream;
+
 /**
  * 
  */
@@ -27,5 +31,49 @@ public class Controller {
      * System.getProperty("file.separator"). The combined use of those methods leads
      * to a software that runs correctly on every platform.
      */
+    private File current;
+
+    public Controller() {
+        this.current = new File(System.getProperty("user.home") + System.getProperty("file.separator") + "output.txt");
+    }
+
+    /**
+     * 
+     * @return the current file
+     */
+    public File getCurrent() {
+        return current;
+    }
+
+    /**
+     * 
+     * @param current file to set as current
+     */
+    public void setCurrent(final File current) {
+        if (!current.exists()) {
+            throw new IllegalArgumentException("The file passed doesn't exist!");
+        }
+        this.current = current;
+    }
+
+    /**
+     * 
+     * @return the absolute path of current file
+     */
+    public String getPath() {
+        return this.current.getAbsolutePath();
+    }
+
+    /**
+     * 
+     * @param s string to print in the current file
+     */
+    public void saveOnCurrent(final String s) {
+        try (PrintStream ps = new PrintStream(this.getPath())) {
+            ps.print(s);
+        } catch (IOException e1) {
+            System.out.println(e1.getMessage());
+        }
+    }
 
 }
